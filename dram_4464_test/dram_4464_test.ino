@@ -1,3 +1,21 @@
+// Arduino is too slow to keep up with DRAM RAS-to-CAS delay, but using
+// registers it is possible to come at least as close as possible to get
+// the DRAM working. Settinig address is absolutely critical operation and
+// needs to be as fast as possible. To make this possible address must be
+// set in one go as coherent register. This can be tricky to get all address
+// bits in one register on some Arduinos, however NANO gives us with A0-A7
+// as one register a perfect fit. So we have WE,OE,RAS,CAS in one register,
+// D0-D3 in another and A0-A7 in a third one. This way we can set the signals
+// as fast as possible. However, with some other models this can work as well.
+
+// Pins configuration for Arduino NANO:
+// WE = Pin D2
+// OE = Pin D3
+// RAS = Pin D4
+// CAS = Pin D5
+// D0-3 = Pin D8-11
+// A0-7 = Pin A0-7
+
 enum Mask {
   WE   = B00000100,
   OE   = B00001000,     
