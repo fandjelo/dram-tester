@@ -35,11 +35,15 @@ void setup() {
   DDRD |= CTRL;
   
   PORTD = CTRL;
+  // Switch RAS on/off 8 times (16 toggles) to initialize DRAM
   for (auto i = 0; i < 16; i++) {
     PORTD ^= RAS;
   }
 }
 
+// Writes data to a given 16-bit address.
+// @param[in] addr is the 16-bit address low-byte-RAS high-byte-CAS
+// @param[in] data is the 4-bit data to write
 void writeData(word addr, byte data) {
   DDRB |= DATA;
   PORTB = (PORTB & ~DATA) | (data & DATA);
@@ -53,6 +57,9 @@ void writeData(word addr, byte data) {
   PORTD ^= RAS;
 }
 
+// Reads data from a given 16-bit address.
+// @param[in] addr is the 16-bit address low-byte-RAS high-byte-CAS
+// @return 4-bit of data read from the given address
 byte readData(word addr) {
   DDRB &= ~DATA;
   PORTC = addr & ADDR;
